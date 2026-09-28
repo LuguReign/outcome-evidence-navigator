@@ -26,8 +26,12 @@ function render(){
 }
 const tokens=s=>new Set(s.toLowerCase().match(/[a-z0-9]+/g)?.filter(x=>!['the','of','and','for','with','at','in','a','to','what','which','are','is','by'].includes(x))||[]);
 function lookup(q){
-  const t=tokens(q), ps=projects();
-  return DATA.indicators.map(r=>({r,p:ps[r.project_id],score:[...t].filter(w=>tokens([r.name,r.kind,r.note,ps[r.project_id].country,ps[r.project_id].name,...flags(r)].join(' ')).has(w)).length})).filter(x=>x.score).sort((a,b)=>b.score-a.score||a.r.id.localeCompare(b.r.id)).slice(0,4);
+  const lower=q.toLowerCase(),ps=projects();
+  const t=new Set([...tokens(q)].filter(w=>!['below','missed','target','targets','revised','revision','dropped','drop'].includes(w)));
+  const country=DATA.projects.find(p=>lower.includes(p.country.toLowerCase()))?.country;
+  if(country)for(const w of tokens(country))t.delete(w);
+  const required=lower.includes('below')||lower.includes('missed')?'Below current target':lower.includes('revised')||lower.includes('revision')?'Target revised':lower.includes('dropped')?'No current target / dropped':null;
+  return DATA.indicators.filter(r=>(!country||ps[r.project_id].country===country)&&(!required||flags(r).includes(required))).map(r=>({r,p:ps[r.project_id],score:2*[...t].filter(w=>tokens(r.name).has(w)).length+[...t].filter(w=>tokens([r.kind,r.note,ps[r.project_id].name].join(' ')).has(w)).length})).filter(x=>x.score||!t.size&&(country||required)).sort((a,b)=>b.score-a.score||a.r.id.localeCompare(b.r.id)).slice(0,4);
 }
 function answer(q){
   const matches=lookup(q);

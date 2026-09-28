@@ -21,6 +21,10 @@ class PilotChecks(unittest.TestCase):
         self.assertEqual(matches[0]["indicator"]["id"], "AR-06")
         self.assertTrue(matches[0]["url"].endswith("#page=43"))
 
+    def test_question_intent_filters_before_ranking(self):
+        matches = retrieve("hypertension below target", self.data)
+        self.assertEqual({m["indicator"]["id"] for m in matches}, {"VN-06", "AR-06"})
+
     def test_all_rows_have_valid_project_and_source(self):
         projects = {p["id"]: p for p in self.data["projects"]}
         self.assertEqual(len(self.rows), len(self.data["indicators"]))

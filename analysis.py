@@ -42,14 +42,24 @@ def tokenize(text: str) -> set[str]:
 
 def retrieve(question: str, data: dict, limit: int = 4) -> list[dict]:
     """Small transparent lexical retrieval. It is not an LLM or semantic search."""
-    terms = tokenize(question)
+    lower = question.lower()
+    terms = tokenize(question) - {"below", "missed", "target", "targets", "revised", "revision", "dropped", "drop"}
     projects = {p["id"]: p for p in data["projects"]}
+    country = next((p["country"] for p in data["projects"] if p["country"].lower() in lower), None)
+    if country:
+        terms -= tokenize(country)
+    required_flag = ("Below current target" if "below" in lower or "missed" in lower
+                     else "Target revised" if "revised" in lower or "revision" in lower
+                     else "No current target / dropped" if "dropped" in lower else None)
     ranked = []
     for row in data["indicators"]:
         project = projects[row["project_id"]]
-        haystack = tokenize(" ".join([row["name"], row["kind"], row["note"], project["country"], project["name"], " ".join(checks(row))]))
-        score = len(terms & haystack)
-        if score:
+        if country and project["country"] != country:
+            continue
+        if required_flag and required_flag not in checks(row):
+            continue
+        score = 2 * len(terms & tokenize(row["name"])) + len(terms & tokenize(" ".join([row["kind"], row["note"], project["name"]])))
+        if score or not terms and (country or required_flag):
             ranked.append((score, row["id"], row, project))
     ranked.sort(key=lambda item: (-item[0], item[1]))
     return [{"indicator": r, "project": p, "flags": checks(r), "url": source_url(p, r)} for _, _, r, p in ranked[:limit]]
