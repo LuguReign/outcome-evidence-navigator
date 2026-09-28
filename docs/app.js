@@ -38,6 +38,9 @@ async function init(){
   try{const response=await fetch('data/indicators.json');if(!response.ok)throw new Error(`HTTP ${response.status}`);DATA=await response.json();}
   catch(e){$('cards').textContent=`Could not load local data: ${e.message}`;return}
   $('n-projects').textContent=DATA.projects.length;$('n-indicators').textContent=DATA.indicators.length;$('n-linked').textContent=DATA.indicators.length;
+  $('n-below').textContent=DATA.indicators.filter(r=>flags(r).includes('Below current target')).length;
+  $('n-revised').textContent=DATA.indicators.filter(r=>flags(r).includes('Target revised')).length;
+  $('n-dropped').textContent=DATA.indicators.filter(r=>flags(r).includes('No current target / dropped')).length;
   for(const country of [...new Set(DATA.projects.map(p=>p.country))])$('country').add(new Option(country,country));
   for(const kind of [...new Set(DATA.indicators.map(r=>r.kind))].sort())$('kind').add(new Option(kind,kind));
   for(const id of ['country','kind','flag'])$(id).addEventListener('change',render);
