@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An auditable pilot for reviewing public World Bank project results frameworks.">
+  <title>Outcome Evidence Navigator</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark">OE</span><span>Outcome Evidence<br><strong>Navigator</strong></span></div>
+    <nav aria-label="Main navigation"><a href="#overview">Overview</a><a href="#explore">Evidence</a><a href="#ask">Ask the data</a><a href="#method">Method</a></nav>
+    <a class="repo" href="https://github.com/LuguReign/outcome-evidence-navigator">View source ↗</a>
+  </header>
+  <main>
+    <section id="overview" class="hero">
+      <div class="hero-copy"><div class="eyebrow"><span class="dot"></span> PUBLIC DATA PILOT · HEALTH SECTOR</div><h1>See the evidence<br><em>behind the result.</em></h1><p>Explore reported indicators, revised targets, and measurement caveats from two World Bank completion reports. Every record links to its source page.</p><div class="hero-actions"><a class="button primary" href="#explore">Explore indicators <span>→</span></a><a class="button secondary" href="#method">How it works</a></div></div>
+      <aside class="scope-card"><div class="scope-head">PILOT SCOPE <span>01 / 02</span></div><div class="scope-row"><span>Documents reviewed</span><strong id="n-projects">—</strong></div><div class="scope-row"><span>Curated indicators</span><strong id="n-indicators">—</strong></div><div class="scope-row"><span>Source-linked records</span><strong id="n-linked">—</strong></div><div class="scope-divider"></div><p>This is a curated demonstration, not an automated assessment of the World Bank portfolio.</p></aside>
+    </section>
+    <section class="band" aria-label="Pilot principles"><div><span>01</span><strong>Traceable</strong><small>PDF page for every record</small></div><div><span>02</span><strong>Auditable</strong><small>Rules and data in GitHub</small></div><div><span>03</span><strong>Careful</strong><small>Reported results ≠ impact</small></div></section>
+    <section id="explore" class="section"><div class="section-top"><div><div class="eyebrow">01 / EVIDENCE EXPLORER</div><h2>Reported results, with context.</h2><p>Target checks use the current target when reported. A dropped indicator is never judged against its original target.</p></div><div class="snapshot">DATA REVIEWED<br><strong>September 2026</strong></div></div>
+      <div class="toolbar"><label>Country <select id="country"><option value="all">All countries</option></select></label><label>Measurement type <select id="kind"><option value="all">All types</option></select></label><label>Review flag <select id="flag"><option value="all">All flags</option><option value="Below current target">Below target</option><option value="Target revised">Target revised</option><option value="No current target / dropped">Dropped</option><option value="Non-additive subindicators">Non-additive</option></select></label><span id="result-count" aria-live="polite"></span></div>
+      <div id="cards" class="cards"></div>
+    </section>
+    <section id="ask" class="section ask-section"><div class="section-top"><div><div class="eyebrow">02 / EVIDENCE LOOKUP</div><h2>Ask a focused question.</h2><p>This public demo uses transparent keyword matching over the curated records. Local LLM drafting is available in the repository; it is not running on this page.</p></div></div><form id="search-form" class="search-form"><label for="question" class="sr-only">Search evidence</label><input id="question" placeholder="e.g. Which hypertension indicators missed their targets?" required><button type="submit">Find evidence →</button></form><div class="suggestions">Try: <button data-query="hypertension below target">hypertension below target</button><button data-query="Viet Nam revised target">Viet Nam revised target</button><button data-query="cervical cancer screening">cervical cancer screening</button></div><div id="answer" class="answer" aria-live="polite"><p>Enter a question to retrieve matching, source-linked indicator records.</p></div></section>
+    <section id="method" class="section method-section"><div class="eyebrow">03 / METHOD & LIMITS</div><h2>A review aid, not an evaluation verdict.</h2><div class="method-grid"><article><span>01 — INPUT</span><h3>Public completion reports</h3><p>Sixteen indicators were manually transcribed from the results tables of two World Bank Implementation Completion and Results Reports. Each record includes a PDF page link and a measurement note.</p></article><article><span>02 — CHECK</span><h3>Simple, explicit rules</h3><p>The application compares actual values with reported current targets, identifies revisions and dropped indicators, and preserves source caveats. It does not infer a target direction for indicators where less could be better.</p></article><article><span>03 — INTERPRET</span><h3>Human judgment required</h3><p>Indicators span outputs, service use, coverage, and quality proxies. Results may reflect revisions, changing populations, and reporting choices. They are not causal estimates, IEG ratings, or WBG Scorecard aggregates.</p></article></div><div class="method-footer"><a href="https://github.com/LuguReign/outcome-evidence-navigator/blob/main/METHODOLOGY.md">Read full methodology ↗</a><a href="https://github.com/LuguReign/world-bank-outcomes">Explore companion ratings dashboard ↗</a></div></section>
+  </main><footer><div><span class="brand-mark">OE</span><span>Outcome Evidence Navigator<br><small>Independent portfolio demonstration · Not affiliated with the World Bank Group</small></span></div><span>Built from publicly disclosed documents · <a href="https://github.com/LuguReign/outcome-evidence-navigator">Source code</a></span></footer>
+</body>
+</html>
